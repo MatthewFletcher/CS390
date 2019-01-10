@@ -1,0 +1,44 @@
+CS390 Notes
+
+IBM 360 Project: devlop an OS that is scalable across the size of the machine, when upgraded, you didn't need a new operating system 
+
+If you make a system too big/general, it becomes difficult to manage 
+
+
+UNICS: Smaller version of MULTICS, more scaled down and simplistic 
+
+UNICS kernel developed by 1 person 
+
+C was never intended as a general purpose language 
+
+Programming language should be readable
+
+C is still one of the top programming languages even though it doesn't have a lot of the features in other modern languages 
+
+
+
+API: Application Program Interface: function signature. What defines the prototype for a procedure
+Function signature: the name, and the number/types of parameters 
+
+In C, the return type is NOT part of the function signature 
+In ADA, the return type IS part of the function signature 
+
+A procedure has no return value, a function has a return value 
+
+
+In C, everything is a function. EVERYTHING 
+
+Richard stallman invented GNU 
+He said that code shoud be free 
+GNU Code base: a set of tools that were free. Rules: you can give this code away to anyone you want but if you modify it you must give the code away to anyone who uses it
+
+
+
+
+POSIX: Specification that sought to bring together into one single unified API the unix OS
+
+Features of Unix:
+1. Process: any program running on a system 
+2. Text based: everything in unix is a text file 
+3. Simplifying assumptions. Everything in Unix is a file 
+4. Pipe: simple, single use functions 
