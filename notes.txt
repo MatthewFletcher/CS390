@@ -41,4 +41,23 @@ Features of Unix:
 1. Process: any program running on a system 
 2. Text based: everything in unix is a text file 
 3. Simplifying assumptions. Everything in Unix is a file 
-4. Pipe: simple, single use functions 
+4. Pipe: simple, single use functions
+
+
+Windows is not text based, relies on registry (database of keys)
+
+Cygwin, WSL are both bash shells for windows 
+
+
+Unix shell operates on a text buffer, and control sequences operate on that buffer
+
+
+
+Basic commands
+echo, displays its arguments
+
+
+tar file (tar ball) is what source code is stored in
+
+
+
