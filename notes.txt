@@ -60,4 +60,55 @@ echo, displays its arguments
 tar file (tar ball) is what source code is stored in
 
 
+$ represents prompt for std user 
+# represents prompt for root
+
+cd: change working directory 
+pwd: print working directory
+mkdir: make directory
+ls: list items in directory
+
+cd is shell command, cwd is the system call referred to by the shell command 
+
+
+shell > library > system call //order of hiearchy, shell calls library calls system call
+
+Everything in unix is a function. A function returns a value. 
+This means that unix functions return an exit code. 
+
+When your int main() returns 0, it means nothing bad happened. You can return different values to represent failure 
+
+
+#define is not a bad thing 
+
+Using a logical or with a bitmask and value will tell you if certain values are set or not 
+
+S_ISREG, S_ISDIR, S_ISFIFO, S_ISLNK, S_ISSOCK
+
+
+& is the logical and, NOT the relational and (&&) 
+
+struct is an aggregate data structure 
+
+
+meld: file comparison for linux
+
+beyond compare: file comparison tool that is proprietary 
+
+
+
+Unix architecture 
+
+Hardware is at center, kernel runs on hardware
+System calls and API run on hardware 
+
+library runs on system calls and api 
+
+shell is a tool that comes with linux, runs on system calls to kernel 
+
+Applications run on shell 
+
+
+Bottom of page 19 explains library vs system calls 
+
 
