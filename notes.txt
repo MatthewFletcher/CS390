@@ -112,3 +112,72 @@ Applications run on shell
 Bottom of page 19 explains library vs system calls 
 
 
+
+
+$PATH: colon delimited file 
+
+Shows all directories that shell should search for executable programs 
+
+
+Two special directories: 
+. --> current directory
+.. --> parent directory 
+
+
+Unix uses a single directory hierarchy. Everything is in the / directory
+Unlike windows: windows has C:/, D:/ etc 
+
+Push down complexity: to make something easier for the user, push the complexity down to a lower level 
+
+. directory is not in path, because malicious program could be executed instead of the system program with the same name 
+
+./prog runs prog located in the local directory 
+$ prog runs prog located in path 
+
+
+Windows: something that runs is called an executable  (.exe)
+In *nix, an executable program is called an image 
+
+
+
+Kernel cannot tell if an image is a binary executable or a shell script 
+
+Put .sh extension on shell scripts to make searching easier 
+
+
+
+File * f;
+f = fopen(fn."rb");
+
+^^^ this checks if a file can be opened in binary mode 
+
+
+which progname #strictly searches path to check if program name is in path 
+
+/usr is unix programs 
+/usr/bin is unix binaries
+/usr/lib/ is library functions
+/usr/include is include functions 
+/usr/local/bin has things that are standard to a unix system, or anything you've installed yourself 
+
+
+whereis searches standard unix directories as well as path (also looks into documentation directories)
+
+
+[ is a function 
+
+Performance can be optimized in an OS by disabling certain system functions 
+
+Always read the man page if you're not sure about an option
+
+backslash \ is the continuation character, allows you to type a command on multiple lines 
+
+
+
+man pages are documentation for a program 
+Divided into sections  (can be quirky)
+
+less is a pager to view stdout
+
+
+
