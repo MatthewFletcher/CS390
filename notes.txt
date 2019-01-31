@@ -1,4 +1,4 @@
-CS390 Notes
+S390 Notes
 
 IBM 360 Project: devlop an OS that is scalable across the size of the machine, when upgraded, you didn't need a new operating system 
 
@@ -180,4 +180,54 @@ Divided into sections  (can be quirky)
 less is a pager to view stdout
 
 
+UNIX FILE SYSTEM 
+
+File model:
+Input goes through a transform to go to an output 
+
+Kernel system calls are read, write, close
+
+
+
+fd
+
+Device driver executed using file descriptor 
+
+Types of files:
+
+Ordinary files: 2 types: text file and binary file 
+Directory Files: 
+Device Files (looks and behaves like a file on the interface level, but when opened, you get the file descriptor index, operates differently than other files)
+
+
+
+File is seen by computer as an array of bytes
+A byte is the fundemental unit of data 
+A byte can represent 256 different numbers (2^8)
+
+Realized soon after invention that computers can do symbolic computing as well as numeric computing 
+
+
+ASCII: American Standard Code for Information Interchange 
+Each number gets a character 
+
+ASCII 48-57 DEC represents 0-9 digits 
+ASCII digits are not intended to do math, but instead for representation of numbers as text 
+
+Foremost bit in an ASCII character (the most significant) is an 0, represents ASCII. 
+
+Above 127 is vendor defined ASCII, not standard. Depends on the vendor 
+
+0-31 are control characters, such as control, CR, backspace, delete, etc
+
+fopen in C with option 'b' reads carriage returns, otherwise \n are interpreted as is
+
+Carriage return stems from typewriter, when you hit the end of a line, the carriage returns across the page to start the next line 
+
+In unix, you only have a line feed, no carriage return 
+
+
+Directory has a table of file names and poitners to i-nodes (struct)
+
+If a file/directory begins with a ., it is a hidden file. 
 
