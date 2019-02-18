@@ -4,7 +4,6 @@ IBM 360 Project: devlop an OS that is scalable across the size of the machine, w
 
 If you make a system too big/general, it becomes difficult to manage 
 
-
 UNICS: Smaller version of MULTICS, more scaled down and simplistic 
 
 UNICS kernel developed by 1 person 
@@ -230,4 +229,99 @@ In unix, you only have a line feed, no carriage return
 Directory has a table of file names and poitners to i-nodes (struct)
 
 If a file/directory begins with a ., it is a hidden file. 
+
+Files are not contiguous on a disc drive. 
+
+
+/bin: standard binaries
+/sbin: admin applications
+/usr/local/bin: software you install 
+/etc contains all system config information in text files
+/dev contains device driver interfaces 
+/tmp contains temporary files
+
+
+Any file on a linux system is accessible via the / path
+Relative file path is the file path relative to where you currently are in the system 
+
+
+
+pwd is print working directory
+cd is change directory
+
+Config files are hidden files/folders in ~/
+
+. represents the current directory 
+.. represents the parent directory 
+
+File permissions 
+
+3 file permissions:
+User Group Other
+
+Each has 3 access levels: rwx
+
+Something accessible to you is accessible by everyone else in the group 
+
+Read: you can see the fil e
+Write: You can edit the file 
+Execute: executable file cannot run without this bit being set
+
+An image in unix  is a compiled program ready for execution 
+
+
+Schebang: used to show that a file is a script, not a bin file 
+#!/bin/bash
+
+
+chmod == change mode
+
+umask REMOVES permissions
+Modifies permissions by removal
+
+Know what a umask does 
+
+666 is default for regular file, 777 for directory 
+
+Google default umask 
+
+
+3 more permission bits 
+
+set UID bit tells who can run the file 
+
+
+
+Text vs Bin file: text file has only printable textual characters in ascii table
+Control characters come before characters, and are non-printable
+
+
+Function in C library called "isprint", checks if something is a printable character 
+
+Set UID: when this bit is set, you can run the file with the permission of the user who owns it 
+
+
+passwd program MUST be run as su
+
+Hard Link:
+
+Say you have multiple file names pointing to the same iNode on a disk 
+iNode keeps a count of the number of pointers to the inode. The inode only gets removed when the inode reference count goes down to zero 
+
+DOES NOT WORK ACROSS MULTIPLE FILE SYSTEMS
+
+
+Hard link command: 
+ln existingfile newfile
+
+
+Soft links (symbolic links)
+Unix is a singly rooted hierarchy.
+
+symlink:looks up real filepath and then goes there
+
+
+
+
+When you log in, your username is convreted to a number, which is stored in the inode 
 
