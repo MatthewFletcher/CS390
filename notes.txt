@@ -1,0 +1,233 @@
+S390 Notes
+
+IBM 360 Project: devlop an OS that is scalable across the size of the machine, when upgraded, you didn't need a new operating system 
+
+If you make a system too big/general, it becomes difficult to manage 
+
+
+UNICS: Smaller version of MULTICS, more scaled down and simplistic 
+
+UNICS kernel developed by 1 person 
+
+C was never intended as a general purpose language 
+
+Programming language should be readable
+
+C is still one of the top programming languages even though it doesn't have a lot of the features in other modern languages 
+
+
+
+API: Application Program Interface: function signature. What defines the prototype for a procedure
+Function signature: the name, and the number/types of parameters 
+
+In C, the return type is NOT part of the function signature 
+In ADA, the return type IS part of the function signature 
+
+A procedure has no return value, a function has a return value 
+
+
+In C, everything is a function. EVERYTHING 
+
+Richard stallman invented GNU 
+He said that code shoud be free 
+GNU Code base: a set of tools that were free. Rules: you can give this code away to anyone you want but if you modify it you must give the code away to anyone who uses it
+
+
+
+
+POSIX: Specification that sought to bring together into one single unified API the unix OS
+
+Features of Unix:
+1. Process: any program running on a system 
+2. Text based: everything in unix is a text file 
+3. Simplifying assumptions. Everything in Unix is a file 
+4. Pipe: simple, single use functions
+
+
+Windows is not text based, relies on registry (database of keys)
+
+Cygwin, WSL are both bash shells for windows 
+
+
+Unix shell operates on a text buffer, and control sequences operate on that buffer
+
+
+
+Basic commands
+echo, displays its arguments
+
+
+tar file (tar ball) is what source code is stored in
+
+
+$ represents prompt for std user 
+# represents prompt for root
+
+cd: change working directory 
+pwd: print working directory
+mkdir: make directory
+ls: list items in directory
+
+cd is shell command, cwd is the system call referred to by the shell command 
+
+
+shell > library > system call //order of hiearchy, shell calls library calls system call
+
+Everything in unix is a function. A function returns a value. 
+This means that unix functions return an exit code. 
+
+When your int main() returns 0, it means nothing bad happened. You can return different values to represent failure 
+
+
+#define is not a bad thing 
+
+Using a logical or with a bitmask and value will tell you if certain values are set or not 
+
+S_ISREG, S_ISDIR, S_ISFIFO, S_ISLNK, S_ISSOCK
+
+
+& is the logical and, NOT the relational and (&&) 
+
+struct is an aggregate data structure 
+
+
+meld: file comparison for linux
+
+beyond compare: file comparison tool that is proprietary 
+
+
+
+Unix architecture 
+
+Hardware is at center, kernel runs on hardware
+System calls and API run on hardware 
+
+library runs on system calls and api 
+
+shell is a tool that comes with linux, runs on system calls to kernel 
+
+Applications run on shell 
+
+
+Bottom of page 19 explains library vs system calls 
+
+
+
+
+$PATH: colon delimited file 
+
+Shows all directories that shell should search for executable programs 
+
+
+Two special directories: 
+. --> current directory
+.. --> parent directory 
+
+
+Unix uses a single directory hierarchy. Everything is in the / directory
+Unlike windows: windows has C:/, D:/ etc 
+
+Push down complexity: to make something easier for the user, push the complexity down to a lower level 
+
+. directory is not in path, because malicious program could be executed instead of the system program with the same name 
+
+./prog runs prog located in the local directory 
+$ prog runs prog located in path 
+
+
+Windows: something that runs is called an executable  (.exe)
+In *nix, an executable program is called an image 
+
+
+
+Kernel cannot tell if an image is a binary executable or a shell script 
+
+Put .sh extension on shell scripts to make searching easier 
+
+
+
+File * f;
+f = fopen(fn."rb");
+
+^^^ this checks if a file can be opened in binary mode 
+
+
+which progname #strictly searches path to check if program name is in path 
+
+/usr is unix programs 
+/usr/bin is unix binaries
+/usr/lib/ is library functions
+/usr/include is include functions 
+/usr/local/bin has things that are standard to a unix system, or anything you've installed yourself 
+
+
+whereis searches standard unix directories as well as path (also looks into documentation directories)
+
+
+[ is a function 
+
+Performance can be optimized in an OS by disabling certain system functions 
+
+Always read the man page if you're not sure about an option
+
+backslash \ is the continuation character, allows you to type a command on multiple lines 
+
+
+
+man pages are documentation for a program 
+Divided into sections  (can be quirky)
+
+less is a pager to view stdout
+
+
+UNIX FILE SYSTEM 
+
+File model:
+Input goes through a transform to go to an output 
+
+Kernel system calls are read, write, close
+
+
+
+fd
+
+Device driver executed using file descriptor 
+
+Types of files:
+
+Ordinary files: 2 types: text file and binary file 
+Directory Files: 
+Device Files (looks and behaves like a file on the interface level, but when opened, you get the file descriptor index, operates differently than other files)
+
+
+
+File is seen by computer as an array of bytes
+A byte is the fundemental unit of data 
+A byte can represent 256 different numbers (2^8)
+
+Realized soon after invention that computers can do symbolic computing as well as numeric computing 
+
+
+ASCII: American Standard Code for Information Interchange 
+Each number gets a character 
+
+ASCII 48-57 DEC represents 0-9 digits 
+ASCII digits are not intended to do math, but instead for representation of numbers as text 
+
+Foremost bit in an ASCII character (the most significant) is an 0, represents ASCII. 
+
+Above 127 is vendor defined ASCII, not standard. Depends on the vendor 
+
+0-31 are control characters, such as control, CR, backspace, delete, etc
+
+fopen in C with option 'b' reads carriage returns, otherwise \n are interpreted as is
+
+Carriage return stems from typewriter, when you hit the end of a line, the carriage returns across the page to start the next line 
+
+In unix, you only have a line feed, no carriage return 
+
+
+Directory has a table of file names and poitners to i-nodes (struct)
+
+If a file/directory begins with a ., it is a hidden file. 
+
