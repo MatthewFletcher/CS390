@@ -3,7 +3,7 @@
 #include <stdlib.h> 
 
 #define CMD_LEN 128
-#define CMD_CT 8
+#define CMD_CT 9
 #define PS1_LEN 128
 #define CMD_SIZE 20
 
@@ -86,25 +86,25 @@ void sh_cat(char **args, int argct)
 
 		//https://www.tutorialspoint.com/cprogramming/c_file_io.htm
 		//https://www.cs.bu.edu/teaching/c/file-io/intro/
-		FILE *ifp;
+		FILE *ifptr;
 		char buff[255];
 		
-		ifp = fopen(args[i], "r");
+		ifptr = fopen(args[i], "r");
 
-		if (ifp == NULL) 
+		if (ifptr == NULL) 
 		{
 		  fprintf(stderr, "cat: %s: No such file or directory\n", args[0]);
 		  return;
 		}
 
-		c = fgetc(ifp);
+		c = fgetc(ifptr);
 		while(c!=EOF)
 		{
 			printf("%c", c);
-			c = fgetc(ifp);
+			c = fgetc(ifptr);
 		}
 
-		fclose(ifp);
+		fclose(ifptr);
 		
 	}
 }
@@ -112,18 +112,75 @@ void sh_cat(char **args, int argct)
 
 void sh_cp(char **args, int argct)
 {
+
+	//if no arguments, print syntax error
+	if(argct == 0)
+	{
+		fprintf(stderr, "cp: missing file operand\n");
+		return;
+	}
+	else if(argct == 1)
+	{
+
+		fprintf(stderr, "cp: missing destination file operand after \'%s\'\n", args[0]);
+		return;
+	}
+	else if(argct != 2)
+	{
+		printf("Please enter exactly 2 arguments");
+		return;
+	}
 	
 
+	FILE *ifptr, *ofptr;
+	char c;
+
+
+
+	//Attempt to open input file
+	//If it fails to open, return error
+	ifptr = fopen(args[0], "r");
+	if (ifptr == NULL) 
+	{
+	  fprintf(stderr, "cp: cannot stat \'%s\': No such file or directory\n", args[0]);
+	  return;
+	}
+
+	//TODO add multiple file copy support
+	ofptr = fopen(args[1], "w");
+	c = fgetc(ifptr);
+
+	while(c!=EOF)
+	{
+		fprintf(ofptr,"%c", c);
+		c = fgetc(ifptr);		
+	}
+	fclose(ofptr);
+	fclose(ifptr);
+
+
+		//Randomly got this error one time
+		//a.out: malloc.c:2401: sysmalloc: Assertion `(old_top == initial_top (av) && old_size == 0) || ((unsigned long) (old_size) >= MINSIZE && prev_inuse (old_top) && ((unsigned long) old_end & (pagesize - 1)) == 0)' failed.
+		//Aborted (core dumped)
 }
 
 
-// void sh_rm(char **args, int argct)
-// {
-
-// }
+void sh_rm(char **args, int argct)
+{
+	for (int i = 0; i < argct; ++i)
+	{
+		remove(args[i]);
+	}
+}
 
 void sh_mkdir(char **args, int argct)
 {
+
+	if(!argct)
+	{
+		printf("mkdir: missing operand\n");
+		return;
+	}
 	for (int i = 0; i < argct; ++i)
 	{
 		char command[2048] = "mkdir ";
@@ -135,6 +192,12 @@ void sh_mkdir(char **args, int argct)
 
 void sh_rmdir(char **args, int argct)
 {
+
+	if(!argct)
+	{
+		printf("rmdir: missing operand\n");
+		return;
+	}
 	for (int i = 0; i < argct; ++i)
 	{
 		char command[2048] = "rmdir ";
@@ -144,15 +207,27 @@ void sh_rmdir(char **args, int argct)
 	}
 }
 
+void sh_touch(char **args, int argct)
+{
+	FILE *fp;
+
+	for (int i = 0; i < argct; ++i)
+	{
+		fp = fopen(args[i], "w+");
+		fclose(fp);
+	}
+
+}
+
 int sh_exit(char **args, int argct)
 {
 
-	if(argct == 0)
+	if((argct == 0) && (argct != 1))
 	{
 		return 0;
 	}
 
-	
+
 	return 0;
 
 }
@@ -167,7 +242,7 @@ int main()
 	
 
 	//Create array to hold list of valid commands
-	char validcommands[][CMD_LEN] = {"echo", "PS1", "cat", "cp", "rm", "mkdir", "rmdir", "exit"};
+	char validcommands[][CMD_LEN] = {"echo", "PS1", "cat", "cp", "rm", "mkdir", "rmdir", "touch", "exit"};
 
 
 	//Initialize PS1 to default value
@@ -178,6 +253,10 @@ int main()
 
 	do 
 	{
+
+		//User IO code obtained from 
+		//https://stackoverflow.com/questions/10112038/parsing-commands-shell-like-in-c
+
 
 		//Print out the PS1 prompt
 		printf("%s", PS1);
@@ -297,6 +376,7 @@ int main()
 				break;
 			//rm
 			case 4:
+				sh_rm(kwargs, argct);
 				break;
 			//mkdir
 			case 5:
@@ -304,14 +384,19 @@ int main()
 				break;
 			//rmdir
 			case 6:
+				sh_rmdir(kwargs, argct);
+				break;
+			//touch
+			case 7:
+				sh_touch(kwargs, argct);
 				break;
 			//exit
-			case 7:
+			case 8:
 				EXIT_CODE = sh_exit(kwargs, argct);
 				break;
 
 			default:
-				printf("How tf did you get her\n");
+				printf("How the actual hell did you get here. \n STOP BREAKING MY CODE\n");
 
 
 		}
