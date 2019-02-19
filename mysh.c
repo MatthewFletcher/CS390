@@ -1,67 +1,164 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h> 
-#include <ctype.h>
 
 #define CMD_LEN 128
 #define CMD_CT 8
 #define PS1_LEN 128
+#define CMD_SIZE 20
 
 
 
-
-
+//Checks command against validcommands, returns an integer 
+//representing the index in the commands array where the 
+//command is found 
 int isValidCommand(char command[], char validcommands[][CMD_LEN])
 {
-
-	char temp[CMD_LEN];
-	const char sepchar[2] = " ";
-	char *token;
-	
-
-	printf("here\n");
-	strcpy(temp, command);
-	printf("here1\n");
-	token = strtok(temp, sepchar);
-	printf("here2\n");
-	printf("token => ->%s<-\n", token);
-
-
-
-	if(strlen(token) == 0)
+	if(strlen(command) == 0)
+	{
+		//-2 signifies no command entered
 		return -2;
-
+	}
 	for (int i = 0; i < CMD_CT; ++i)
 	{
-		printf("loop %d\n", i);
 
-		//printf("Comparing ->%s<- to ->%s<-\n", token, validcommands[i]);
-		if(!(strcmp(token, validcommands[i]))) 
+		//printf("Comparing ->%s<- to ->%s<-\n", command, validcommands[i]);
+		if(!(strcmp(command, validcommands[i]))) 
 			{
 				//printf("Found at %d\n", i);
+				//Return index if found
 				return i;
 			}
 	}
 
+	//Return -1 if invalid command is entered. 
 	return -1;
 }
 
+/////////////////////
+// Shell Functions //
+/////////////////////
 
-//Functions
-void echo(char command[])
+void sh_echo(char **kwargs, int argct)
 {
-	printf("%s\n", command);
+
+	int nl = 1;
+	//printf("->%d<- args entered\n", argct);
+	for (int i = 0; i < argct; ++i)
+	{
+		if(strcmp(kwargs[i], "-n") == 0)
+		{
+			nl = 0;
+			continue;
+		}
+				printf("%s ", kwargs[i]);
+	}
+
+	if(nl) printf("\n");
 }
 
-char ps1(char PS1[])
+void sh_ps1(char **args, int argct, char PS1[])
+{	
+
+	//If no arguments passed, do nothing. 
+	if(!argct) return;
+
+
+	//Clear PS1
+	PS1[0] = '\0';
+
+	for (int i = 0; i < argct; ++i)
+	{
+		strcat(PS1, args[i]);
+		strcat(PS1, " ");
+	}
+
+	return;
+}
+
+void sh_cat(char **args, int argct)
+{
+
+	char c;
+
+	for (int i = 0; i < argct; ++i)
+	{
+
+		//https://www.tutorialspoint.com/cprogramming/c_file_io.htm
+		//https://www.cs.bu.edu/teaching/c/file-io/intro/
+		FILE *ifp;
+		char buff[255];
+		
+		ifp = fopen(args[i], "r");
+
+		if (ifp == NULL) 
+		{
+		  fprintf(stderr, "cat: %s: No such file or directory\n", args[0]);
+		  return;
+		}
+
+		c = fgetc(ifp);
+		while(c!=EOF)
+		{
+			printf("%c", c);
+			c = fgetc(ifp);
+		}
+
+		fclose(ifp);
+		
+	}
+}
+
+
+void sh_cp(char **args, int argct)
 {
 	
 
-	return *PS1;
 }
 
 
-int main(int argc, char *argv[])
+// void sh_rm(char **args, int argct)
+// {
+
+// }
+
+void sh_mkdir(char **args, int argct)
+{
+	for (int i = 0; i < argct; ++i)
+	{
+		char command[2048] = "mkdir ";
+		strcat(command, args[i]);
+		system(command);
+
+	}
+}
+
+void sh_rmdir(char **args, int argct)
+{
+	for (int i = 0; i < argct; ++i)
+	{
+		char command[2048] = "rmdir ";
+		strcat(command, args[i]);
+		system(command);
+
+	}
+}
+
+int sh_exit(char **args, int argct)
+{
+
+	if(argct == 0)
+	{
+		return 0;
+	}
+
+	
+	return 0;
+
+}
+
+
+int main()
 {
 	int EXIT_CODE=1;
 
@@ -81,27 +178,88 @@ int main(int argc, char *argv[])
 
 	do 
 	{
-		//Clear array holding command
-		memset(&command[0], '\0', sizeof(command));
-		
+
+		//Print out the PS1 prompt
 		printf("%s", PS1);
 
-		//Initialize index counter
-		char *command = NULL;
-		ssize_t bufsize = 0;
-		getline(&command, &bufsize, stdin);
+		//Create 2 arrays, one holding the original 
+		//line and one holding the dynamic line (the one
+		// that will be modified throughout the program)
+		char *line = malloc(CMD_LEN);
+		
+		//Set all elements of array to null, to avoid any
+		//stray values floating around
+		//memset(&line[0], ' ', sizeof(line));
 
-		//Remove New Line char
-		//https://stackoverflow.com/questions/2693776/removing-trailing-newline-character-from-fgets-input
-		char *pos;
-		if ((pos=strchr(command, '\n')) != NULL)
-		    *pos = '\0';
-		else
-		    continue;
+		//Allocate space and then
+		// Copy contents of the line 
+		// into a static copy
+		char *line_s = malloc(CMD_LEN);
+		strcpy(line_s, line);
 
-		//Print command to check proper syntax
-		printf("Requested command ->%s<-\n", command);
+		//memset(&command[0], '\0', sizeof(command));
 
+		//Actually get the input from the user 
+		fgets(line, CMD_LEN, stdin);
+
+		char command[CMD_SIZE];
+
+		//Read input from line, match to formatter
+		//and place in command
+		sscanf(line, "%20s ", command);
+
+		line = strchr(line, ' ');
+
+		//Debug to ensure that command value is correct 
+		//printf("Command value: %s\n", command);
+
+
+		//Dynamically allocate memory for arg and kwargs
+
+		int argct = 0;
+
+		//Allocate dynamic memory on heap 
+		//and pointer on stack 
+		char **kwargs = malloc(sizeof(char *));
+		while(1) 
+		{
+		    char arg[20];
+		    if(line && (sscanf(++line, "%20s", arg) == 1))
+		    {
+		    	//Allocate memory for 20 pointers 
+		    	kwargs[argct] = malloc(sizeof(char)*20); 
+		    	strncpy(kwargs[argct], arg, 20);
+
+		    	argct++;
+
+		    	kwargs = realloc(kwargs, sizeof(char *) * argct+1);
+		    	line = strchr(line, ' ');
+		    }
+		    else
+		    {
+		    	break;
+		    }
+		}
+
+
+		//At this point, the command is stored in the 
+		//command array, and the args are stored in a 2d array
+		// in kwargs
+
+		// for (int i = 0; i < argct; ++i)
+		// {
+		// 	free(kwargs[i]);
+		// }
+		
+		// free(kwargs);
+		// free(line_s);
+		
+		
+
+		// for (int i = 0; i < argct; ++i)
+		// {
+		// 	printf("Argument %i is %s\n", i, kwargs[i]);
+		// }
 		
 		if((sw = isValidCommand(command, validcommands)) == -1)
 		{
@@ -117,34 +275,39 @@ int main(int argc, char *argv[])
 		{
 			//empty command
 			case -2:
+				printf("No command entered. \n");
 				continue;
 
 
 			//echo
 			case 0:
-				echo(command);
+				sh_echo(kwargs, argct);
 				break;
 			//PS1	
 			case 1:
-				ps1(command);
+				sh_ps1(kwargs, argct, PS1);
 				break;
 			//cat
 			case 2:
+				sh_cat(kwargs, argct);
 				break;
 			//cp
 			case 3:
+				sh_cp(kwargs, argct);
 				break;
 			//rm
 			case 4:
 				break;
 			//mkdir
 			case 5:
+				sh_mkdir(kwargs, argct);
 				break;
 			//rmdir
 			case 6:
 				break;
 			//exit
 			case 7:
+				EXIT_CODE = sh_exit(kwargs, argct);
 				break;
 
 			default:
@@ -153,6 +316,8 @@ int main(int argc, char *argv[])
 
 		}
 
-	}while(EXIT_CODE);
+	}while(EXIT_CODE); //EXIT_CODE should remain 1 unless errors occur
+					// which has not been implemented yet 
+
 	return EXIT_CODE;
 }
