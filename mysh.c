@@ -35,6 +35,7 @@ int isValidCommand(char command[], char validcommands[][CMD_LEN])
 	return -1;
 }
 
+
 /////////////////////
 // Shell Functions //
 /////////////////////
@@ -160,6 +161,7 @@ void sh_cp(char **args, int argct)
 
 
 		//Randomly got this error one time
+		//Error occurs when attempting to cat a file copied to a different directory
 		//a.out: malloc.c:2401: sysmalloc: Assertion `(old_top == initial_top (av) && old_size == 0) || ((unsigned long) (old_size) >= MINSIZE && prev_inuse (old_top) && ((unsigned long) old_end & (pagesize - 1)) == 0)' failed.
 		//Aborted (core dumped)
 }
@@ -340,11 +342,7 @@ int main()
 		// 	printf("Argument %i is %s\n", i, kwargs[i]);
 		// }
 		
-		if((sw = isValidCommand(command, validcommands)) == -1)
-		{
-			printf("%s: Invalid Command, Not found\n",command );
-			continue;
-		}
+		sw = isValidCommand(command, validcommands);
 
 
 
@@ -356,8 +354,10 @@ int main()
 			case -2:
 				printf("No command entered. \n");
 				continue;
-
-
+			//invalid command
+			case -1:
+				printf("%s: Invalid Command, Not found\n",command );
+				continue;
 			//echo
 			case 0:
 				sh_echo(kwargs, argct);
