@@ -327,13 +327,7 @@ int main()
 		//command array, and the args are stored in a 2d array
 		// in kwargs
 
-		// for (int i = 0; i < argct; ++i)
-		// {
-		// 	free(kwargs[i]);
-		// }
-		
-		// free(kwargs);
-		// free(line_s);
+
 		
 		
 
@@ -400,6 +394,16 @@ int main()
 
 
 		}
+
+
+		//Clear args, lines, and everything needed for the next step 
+		for (int i = 0; i < argct; ++i)
+		{
+			free(kwargs[i]);
+		}
+		
+		free(kwargs);
+		free(line_s);
 
 	}while(EXIT_CODE); //EXIT_CODE should remain 1 unless errors occur
 					// which has not been implemented yet 
