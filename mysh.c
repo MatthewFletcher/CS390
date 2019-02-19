@@ -211,6 +211,11 @@ void sh_rmdir(char **args, int argct)
 
 void sh_touch(char **args, int argct)
 {
+	if(!argct)
+	{
+		printf("touch: missing file operand\n");
+		return;
+	}
 	FILE *fp;
 
 	for (int i = 0; i < argct; ++i)
@@ -230,6 +235,8 @@ int sh_exit(char **args, int argct)
 	}
 
 
+
+	//TODO logic to implement an exit code
 	return 0;
 
 }
@@ -259,7 +266,6 @@ int main()
 		//User IO code obtained from 
 		//https://stackoverflow.com/questions/10112038/parsing-commands-shell-like-in-c
 
-
 		//Print out the PS1 prompt
 		printf("%s", PS1);
 
@@ -267,13 +273,10 @@ int main()
 		//line and one holding the dynamic line (the one
 		// that will be modified throughout the program)
 		char *line = malloc(CMD_LEN);
-		
-		//Set all elements of array to null, to avoid any
-		//stray values floating around
-		//memset(&line[0], ' ', sizeof(line));
+
 
 		//Allocate space and then
-		// Copy contents of the line 
+		// copy contents of the line 
 		// into a static copy
 		char *line_s = malloc(CMD_LEN);
 		strcpy(line_s, line);
@@ -293,7 +296,6 @@ int main()
 
 		//Debug to ensure that command value is correct 
 		//printf("Command value: %s\n", command);
-
 
 		//Dynamically allocate memory for arg and kwargs
 
@@ -326,10 +328,6 @@ int main()
 		//At this point, the command is stored in the 
 		//command array, and the args are stored in a 2d array
 		// in kwargs
-
-
-		
-		
 
 		// for (int i = 0; i < argct; ++i)
 		// {
