@@ -325,3 +325,265 @@ symlink:looks up real filepath and then goes there
 
 When you log in, your username is convreted to a number, which is stored in the inode 
 
+
+find command
+find <root dir> <options> <action> 
+		-name <filename>
+
+Angle brackets are required commands
+regular brackets are optional commands 
+
+<root dir> is where find command starts 
+<options> are run options
+<action> is what the shell should do 
+
+Wildcard expansion is called globbing 
+
+
+Double quotes or single quotes do not expand a wildcard (*)
+
+-exec lets you execute an option on the found files 
+
+-name finds by name, 
+! -name finds by not name 
+
+
+
+Regex
+filename[123] finds any file called filename ending with 1 2 or 3
+* matches any characters including 0 characters
+Page 159 has a list of regex 
+
+Although you CAN use meta characters in file names, don't. 
+
+Double quote interprets the dollar sign and the cmd substitution symbol (backtick), but will not interpret wildcards  "$`<command`>"
+
+Single quote does no interpretation whatsoever 
+
+
+0: stdin is open when you start a program 
+1: stdout
+2: stderr
+
+stdout: output of command
+stderr: error messages only 
+
+You don't know/dont care where the data stream is coming from or where it's going 
+
+P171 has info on redirection 
+stderr and stdout are separate file streams
+Allows for output to go to 1 file and errors to another 
+
+1>&2 sends stdout to stderr 
+2>&1 sends stderr to stdout 
+
+Commands can be grouped with parentheses 
+
+
+/dev/null is a file that incinerates anything piped into it 
+/dev/null is a pseudo device, does not represent a physical device 
+
+
+/dev/tty forces to terminal output 
+
+forces output to go to terminal device regardless of where output of program is going. If you have a program going to a file, you can redirect output inthe script to /dev/tty and it will allow you to output the text to the termianl. 
+
+To write a pipe in c
+
+int main()
+{
+	char input[512];
+`	while(fgets(input, sizeof(input), stdin))
+	{
+		//do stuff here
+	}
+	return 0;
+}
+
+
+tee allows you to duplicate output to both stdout and redirected output 
+
+Command substitution
+$ echo "File count = `ls | wc -l`"
+Allows you to turn a command into data 
+
+
+echo $PATH shows you the path output 
+echo "$PATH" prints $PATH  (verbatim)
+
+$ HERE = $PWD
+$ HERE = `pwd`
+
+Both of these ^^ do the same thing 
+
+
+If copying files from one place to another, consider settings $HERE and $THERE variables 
+
+Shell vars should be in upper case (general convention)
+
+
+Shell variables defined at login are called environment variables 
+
+
+$ configure --prefix=$HOME/bash 
+$ make
+# make install 
+
+^^ this prefixes $HOME/bash to the install directory 
+
+Page 182: Shell's treatment of the command line 
+IMPORTANT READ THIS 
+
+Steps to treate command line
+1. Parsing: break up using spaces and tabs as delimiters
+2. Variable evaluation: evaluate any $vars and replace with their values 
+3. COmmand substitution 
+4. Check for redirection (<, >, <<, >>, |)
+5. Wild card interpretation (done by glob)
+6. Path evaluation 
+
+xarg breaks up arguments and feeds them into stdout
+
+
+Midterm will cover up to page 184
+
+Study methodology for midterm 
+
+1. Look at quizzes. Quiz questions will be replicated on midterm. 
+2. Look at lecture notes 
+3. Look at book. 
+
+A few topics discussed during the lecture are not in the book. 
+
+
+Definitions, questions, potentially some code snippets 
+Shell commands are fair game
+
+
+
+
+Test review
+Defs:
+POSIX 16 
+ECho 38
+vi: 122
+pipe a method whereby the output of one process goes to the input of another process (compare to redirection) 
+xarg: 183
+umask: 102
+ls -a: 68
+chmod: 96
+process: 188
+tar: 84
+
+Linux is unix-like, explain how unix api is used to create a unix like OS. 
+14
+
+Describe what kernel does and how it is accessed by programs 
+18
+
+How is path variable used page 26
+
+stty page 47
+
+what is soft link and hard link page 108
+
+explain what happens when the shell command line parser encounters a $, what happens when it encounters a *: page 158 
+
+explain difference between ", ', and ` 164
+
+find command p113
+
+how is inode used in a linux system, how is it implemented, relation between inode and directory  p68, 75, 104
+how is redirection used, how is a pipe used,  p 165
+
+
+
+Process
+Page 188
+
+On boot, init is bootstrapped which starts up booting 
+
+process names that end with d are a daemon 
+
+
+Fork: program that is running is the same as the subprocess 
+
+
+PPID: parent process ID
+
+Parent can flow to child, but child cannot flow to parent 
+
+Fork creates process
+Exec overlays with the new program 
+Wait pauses execution until process returns a completion code 
+
+
+int errno is a global variable
+
+extern means that it is a declaration, not a definition 
+
+Definition allocates memory, declaration does not 
+
+zombie process is waiting for the parent to do a wait on the child
+
+
+Every process has UID and GID, tells what permissions that program has 
+
+passwd is a program that belongs to root. If setuid bit is set, run programs with permissions of owner
+
+By default, user defined variables are not inherited by child processes 
+
+
+Zombie process cannot be killed
+
+Orphan is where parent dies but child is still running. 
+
+
+ENV vars that exist to offer configuratio info for given process 
+
+
+Attributes flow down but do not flow back up again 
+
+if in parentheses, kicks off subprocess (child) 
+
+(cd $dir; pwd);pwd will print out current directory
+cd $dir;pwd;pwd will print out dir 
+
+
+
+DO NOT TERMINATE PROCESS UNLESS YOU HAVE TO
+
+ 
+#include <iostream>
+bool AbortFlag = false;
+void SetAbort(int sig)
+{
+	Abortflag = true;
+}
+
+int main()
+{
+	int i;
+	...
+	...
+	signal(SIGINT, SetAbort); //^C interrupt, name of function to go to when that signal is entered. 
+	
+	return 0;
+}
+
+
+
+extern bool Abortflag; //I am using this term but it's not defined in this compilation unit 
+
+
+$ <command>& #runs a command independently of terminal, in the background.
+$fg <PID> #brings that process to the foreground again 
+
+at: runs command at given time 
+
+cron: scheduling tool to run tasks continuously at given time intervals 
+token: a piece of information in textual form 
+
+
+crontab: tells you whats in the cron table 
+
