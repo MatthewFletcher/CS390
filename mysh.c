@@ -9,6 +9,10 @@
 
 
 
+
+
+
+
 //Checks command against validcommands, returns an integer 
 //representing the index in the commands array where the 
 //command is found 
@@ -34,8 +38,6 @@ int isValidCommand(char command[], char validcommands[][CMD_LEN])
 	//Return -1 if invalid command is entered. 
 	return -1;
 }
-
-
 /////////////////////
 // Shell Functions //
 /////////////////////
@@ -242,16 +244,40 @@ int sh_exit(char **args, int argct)
 }
 
 
+
+
 int main()
 {
 	int EXIT_CODE=1;
 
 	char command[CMD_LEN];
 	char PS1[PS1_LEN];
-	
+
+
+
+
+	typedef struct pair
+	{
+		void* function;
+		char* functionName;
+
+	}pair;
+
+	pair* objects = malloc(sizeof(pair) * CMD_CT);
+
+	objects[0].command = &echo;
+
+	char validcommands[][CMD_LEN] = {"echo", "PS1", "cat", "cp", "rm", "mkdir", "rmdir", "touch", "exit"};
+
+	// /*assign everything to the objects array*/
+
+	// //assume command is a char* that represents the command
+	// for (int i = 0; i < NUMBER_OF_COMMANDS; i++)
+	//     if (!strcmp(objects[i].functionName, command))
+	//         objects[i].function(arguments);
+		
 
 	//Create array to hold list of valid commands
-	char validcommands[][CMD_LEN] = {"echo", "PS1", "cat", "cp", "rm", "mkdir", "rmdir", "touch", "exit"};
 
 
 	//Initialize PS1 to default value
@@ -291,6 +317,7 @@ int main()
 		//Read input from line, match to formatter
 		//and place in command
 		sscanf(line, "%20s ", command);
+
 
 		line = strchr(line, ' ');
 
