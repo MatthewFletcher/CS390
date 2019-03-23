@@ -1,0 +1,91 @@
+CS 389
+SPRING 2019
+Mr. Rheinfurth
+Programming Assignment 2
+Introduction
+The shell is the primary means for user interaction with a unix system. The shell is a program like any other program and has the capabilities built into the logic to implement the functionality users require.
+
+Assignment Description
+This assignment is to update the shell program assigned in Program 1. The additional capabilities are 1) implement command execution, and 2) implement a additional program called myls.c which will read a directory and display the contents.
+
+Program Requirements
+    1. The student shall create an application which will implement a command loop and accept the commands defined by the following requirements.
+
+    2.The student shall implement the command execution routine to execute an external command submitted to the shell program.
+
+    3.The command execution routine shall recognize a simple program name or an
+    absolute path.
+
+    4.The exec( ) command shall be “ int execv(const char *path, char *const argv[]);”
+
+    5.When a simple program name is used the program shall use getenv( “PATH”) to
+    find the program location.
+
+6.The student shall implement a separate program call myls.c which will display the contents of a directory.
+
+7.myls.c shall accept no argument or the “-a” arg as in the “ls” command and behave accordingly.
+
+8.The name of the program shall be “mysh2”, an abbreviation of “my shell”. The
+program must be written in “C” and named “mysh2.c.
+
+9.The name of the directory list program shall be “myls”. This program must be
+written in “C” and named “myls.c”.
+
+10. The student will “tar” the program. The tar command for the “C” program is :
+$ tar czf studentlastname_mysh2.tgz mysh2.c myls.c
+
+Submission Guidelines
+
+1. The assignment shall be uploaded to the instructor using the CANVAS website.
+
+2. The tar file shall use the following naming convention:
+studentlastname_mysh2.tgz. For example, if your last name is “smith” the
+filename would be smith_mysh2.tgz. The myls.c file shall be in the tar file.
+
+3. The assignment will be due Tuesday, March 26, 2019.
+
+4.The assignment may be turned in Thursday, March 28, 2019 for a mandatory loss of
+one letter grade. The assignment will not be accepted after this date.
+
+AN EXAMPLE OF ARGV USAGE:
+#define TRUE 1
+#define FALSE 0
+int main(int argc,const char* argv[])
+{
+int status = 0;
+int arg1,flagError;
+flagError = FALSE;
+if (argc == 1)
+{
+arg1 = FALSE;
+}
+else if (argc == 2)
+{
+if (strcmp(argv[1],"-a") == 0)
+{
+arg1 = TRUE;
+}
+else
+{
+printf("ERROR: invalid argument\n");
+flagError = TRUE;
+}
+}
+else
+{
+printf("Usage: $ ls [-a]\n");
+}
+
+}
+
+if (flagError == FALSE)
+{
+/* DO CODE */
+}
+else
+{
+status = 1;
+}
+return status;
+
+

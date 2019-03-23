@@ -1,0 +1,13 @@
+//#################### LS #############################
+else if(strcmp(cmd, "ls") == 0){
+//printf("input: %s %s\n", cmd, mod);
+if(strcmp(mod, "-a") == 0){
+char *args[] = {"./myls", "-a", NULL};
+execv(args[0], args);
+}
+else{
+char *args[] = {"./myls", NULL};
+execv(args[0], args);
+}
+}
+
