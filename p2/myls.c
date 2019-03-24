@@ -41,8 +41,8 @@ int main(int argc, const char **argv)
             }
         }
     }
-    printf("\n %u\n", count);
-
+    //    printf("\n %u\n", count);
+    //printf("%s","\n");
     return 0;
 }
 

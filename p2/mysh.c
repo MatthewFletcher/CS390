@@ -2,6 +2,8 @@
 #include <string.h>
 #include <stdlib.h> 
 #include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 #define CMD_LEN 128
 #define CMD_CT 9
@@ -229,29 +231,44 @@ void sh_touch(char **args, int argct)
 
 void sh_ls(char **args, int argct)
 {
+    pid_t i = fork();
+    if(i < 0)
+
+    {
+        perror("Fork failed\n");
+        exit(1);
+    }
     //printf("%s\n", "sh_ls called from mysh");
-    if(argct && !(strcmp(args[0], "-a")))
+    //Childprocess running
+    if(i==0)
     {
-        //  printf("%s\n","-a called");
-        char* arr[] = {"./myls","-a", NULL};
+        if(argct && !(strcmp(args[0], "-a")))
+        {
+            //  printf("%s\n","-a called");
+            char* arr[] = {"./myls","-a", NULL};
 
-        execv("./myls",arr);
+            execv("./myls",arr);
 
-        printf("%s\n","got here");
+            printf("%s\n","got here");
+        }
+        else if(!argct)
+        {
+
+            //printf("%s\n","-a not called");
+            char* arr[] = {NULL};
+            execv("./myls", arr);
+        }
+        else
+        {
+            printf("%s\n","Invalid option.");
+        }
     }
-    else if(!argct)
-    {
+// Parent wait for child.
+        wait(NULL);
+    printf("\n");
+    return;
 
-        //printf("%s\n","-a not called");
-        char* arr[] = {NULL};
 
-        execv("./myls", arr);
-    }
-    else
-    {
-        printf("%s\n","Invalid option.");
-    }
-    printf("%s\n","got here");
 }
 
 int sh_exit(char **args, int argct)
