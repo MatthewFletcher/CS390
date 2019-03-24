@@ -37,7 +37,12 @@ int main(int argc, const char **argv)
             if(dptr->d_name[0] != '.')
             {
                 count++;
-                printf("%s\t", dptr->d_name);
+                //printf("%d ",dptr->d_type);
+                printf("%s", dptr->d_name);
+                if(dptr->d_type == 4)
+                printf("/\t");
+                else
+                    printf("\t");
             }
         }
     }
